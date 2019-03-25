@@ -16,6 +16,7 @@ GetUsers_url = 'https://www.amazon.cn/dp/B001BKVXOA/ref\
 #html = requests.get(GetUsers_url,headers = headers)
 html = requests.get(GetUsers_url)
 html = BeautifulSoup(html.text, 'html.parser')
+#print(html)
 soup = html.find_all('noscript')
 soup = re.findall('<div>.+?<br/>',str(soup))
 soup = re.split('<div> |<br/>',soup[0])
@@ -23,7 +24,14 @@ soup.pop(0)
 soup.pop(-1)
 print(soup)
 
+soup = html.find('div',class_="content")
+print(soup)
 
+for infor in soup.find_all('li'):
+	#print(infor.text.split('\n'))
+           #print(infor.text)
+           #print(re.findall('(?m)\w{1}.+?  ',str(infor)))
+           print(re.findall('(?m)\w{1}.+',infor.text))
 #print(html)
 #soup = html.find('div',class_="fk-editor simpleText fk-editor-break-word ")
 #print(soup)
