@@ -26,6 +26,8 @@ print(soup)
 
 soup = html.find('div',class_="content")
 print(soup)
+soup.style.clear()
+#print(soup)
 
 for infor in soup.find_all('li'):
 	#print(infor.text.split('\n'))
