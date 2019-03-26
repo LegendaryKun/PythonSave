@@ -17,12 +17,14 @@ GetUsers_url = 'https://www.amazon.cn/dp/B001BKVXOA/ref\
 html = requests.get(GetUsers_url)
 html = BeautifulSoup(html.text, 'html.parser')
 #print(html)
+print('您所查找的亚马逊图书：《%s》\n'%(html.find('span',class_="a-size-large").text))
 soup = html.find_all('noscript')
 soup = re.findall('<div>.+?<br/>',str(soup))
 soup = re.split('<div> |<br/>',soup[0])
 soup.pop(0)
 soup.pop(-1)
 print(soup)
+
 
 soup = html.find('div',class_="content")
 print(soup)
