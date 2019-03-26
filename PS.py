@@ -1,8 +1,5 @@
-#在凡科建站上创建网页添加学号，然后读取学号
-'''
-当在网页上修改学号时，可能改变网页的HTML导致获取学号信息错误
-，这时可以把当前文本删除，然后新建文本重新添加学号。
-'''
+#亚马逊图书信息获取
+
 
 import requests
 from bs4 import BeautifulSoup
@@ -16,47 +13,27 @@ GetUsers_url = 'https://www.amazon.cn/dp/B001BKVXOA/ref\
 #html = requests.get(GetUsers_url,headers = headers)
 html = requests.get(GetUsers_url)
 html = BeautifulSoup(html.text, 'html.parser')
-#print(html)
-print('您所查找的亚马逊图书：《%s》\n'%(html.find('span',class_="a-size-large").text))
+
+
+bookname = html.find('span',class_="a-size-large").text
+print('您所查找的亚马逊图书：《%s》\n'%(bookname))
+
+
 soup = html.find_all('noscript')
 soup = re.findall('<div>.+?<br/>',str(soup))
 soup = re.split('<div> |<br/>',soup[0])
 soup.pop(0)
 soup.pop(-1)
+print('《%s》简介：'% bookname)
 print(soup)
 
 
 soup = html.find('div',class_="content")
-print(soup)
 soup.style.clear()
-#print(soup)
-
+print('\n《%s》基本信息：'%bookname)
 for infor in soup.find_all('li'):
-	#print(infor.text.split('\n'))
-           #print(infor.text)
-           #print(re.findall('(?m)\w{1}.+?  ',str(infor)))
            print(re.findall('(?m)\w{1}.+',infor.text))
-#print(html)
-#soup = html.find('div',class_="fk-editor simpleText fk-editor-break-word ")
-#print(soup)
-#print(soup.text)
 
-#soup = soup.find_all('div')
-
-#soup = html.find_all('noscript')
-#print(soup[1])
-
-#print(soup)
-'''
-L = []
-for i in soup:
-           i = str(i)
-           i = i.strip('</div>')
-           L.append(i)
-           
-print(L)
-
-'''
 
 
 
