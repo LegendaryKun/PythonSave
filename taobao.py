@@ -1,9 +1,10 @@
 #Selinium 登录淘宝
-#还需加上截取显示验证码
+#注意如果网速太慢很多时候会加载很慢难以成功
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from time import sleep
 import datetime
+import re
 
 class taobao_infos:
 
@@ -29,9 +30,14 @@ class taobao_infos:
         sleep(3)
         self.browser.find_element_by_name('password').send_keys('wb1324')
         sleep(4)
-        Vcode = input('请输入验证码：')
-        self.browser.find_element_by_name('verifycode').send_keys(Vcode)
-        sleep(4)        
+        
+        Source = self.browser.page_source   #获取网页源码
+        if re.findall('src=\"\"',Source):   #判断时候有验证码，因为有时候登录不需要验证码
+          print('No input validation code')
+        else:
+          Vcode = input('请输入验证码：')
+          self.browser.find_element_by_name('verifycode').send_keys(Vcode)
+          sleep(4)        
         self.browser.find_element_by_xpath('//*[@class="btn_tip"]/a/span').click()  #登录        
         sleep(8)
 
@@ -50,15 +56,15 @@ class taobao_infos:
                if now.strftime('%Y-%m-%d %H:%M:%S') == self.buytime:
                  while True:
                    try:
-                     print(datetime.datetime.now())
-                     driver.find_element_by_link_text('提交订单').click()
+                     self.browser.find_element_by_link_text('提交订单').click()
+                     print('buy_on_time time:', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) #格式化datetime
                    except:
                      sleep(1)
                sleep(0.1)
 
 
 url = 'https://login.taobao.com/member/login.jhtml'   #淘宝登录页面
-buytime = '2019-04-02 22:33:01'
+buytime = '2019-04-05 23:07:01'   #下单时间
 a = taobao_infos(url,buytime)
 a.login()
 a.settle()
